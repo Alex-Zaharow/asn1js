@@ -1,4 +1,5 @@
 // ASN.1 JavaScript decoder
+// http://www.oid-info.com/get/2.5.4.10
 // Copyright (c) 2008-2013 Lapo Luchini <lapo@lapo.it>
 
 // Permission to use, copy, modify, and/or distribute this software for any
@@ -266,7 +267,8 @@ ASN1.prototype.content = function () {
             this.stream.parseOctetString(content, content + len);
     //case 0x05: // NULL
     case 0x06: // OBJECT_IDENTIFIER
-        return this.stream.parseOID(content, content + len);
+            var oid = this.stream.parseOID(content, content + len); 
+        return "<a href=\"http://www.alvestrand.no/objectid/"+oid+".html\">"+oid+"</a>";
     //case 0x07: // ObjectDescriptor
     //case 0x08: // EXTERNAL
     //case 0x09: // REAL
@@ -333,10 +335,20 @@ ASN1.prototype.toDOM = function () {
     head.innerHTML = s;
     var content = this.content();
     if (content !== null) {
-        content = String(content).replace(/</g, "&lt;");
-        var preview = DOM.tag("span", "preview");
-        preview.appendChild(DOM.text(content));
-        head.appendChild(preview);
+        if( String(content).search(/\<(?:a|\/a)/g)>-1 )
+        {
+            content = String(content).replace(/\<(?!(a)|(\/a))/g, "&lt;");
+            var preview = DOM.tag("span", "preview");
+            preview.innerHTML = content;
+            head.appendChild(preview);
+        }
+        else
+        {
+            content = String(content).replace(/\<(?!(a)|(\/a))/g, "&lt;");
+            var preview = DOM.tag("span", "preview");
+            preview.appendChild(DOM.text(content));
+            head.appendChild(preview);
+        }
     }
     node.appendChild(head);
     this.node = node;
