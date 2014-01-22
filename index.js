@@ -10,6 +10,36 @@ function id(elem) {
 function toHTML(obj) {
     return String(obj).replace(/</g, "&lt;");
 }
+
+function getOidDescriptionHandler()
+{
+    $(".oid1").mouseover (
+                            function(eventObject)
+                            {
+                                if(!this.title)
+                                {
+                                    //alert( $(this).text() );
+                                    $.ajax  (
+                                                {
+                                                    type: "GET",
+                                                    url: "http://www.oid-info.com/get/"+$(this).text(),
+                                                    crossDomain: true,
+                                                    error:      function(data)
+                                                                {
+                                                                    alert("Ошибка при чтении oid:\n"+data);
+                                                                },
+                                                    success:    function(data, status, response)
+                                                                {
+                                                                    alert(data);
+                                                                }
+                                                }
+                                            );
+                                }
+                            }
+                        )
+}
+
+
 function decode(der) {
     var tree = id('tree');
     var dump = id('dump');
@@ -26,6 +56,7 @@ function decode(der) {
         // update URL hash (does this have length limits we should avoid?)
         hash = '#' + hex;
         window.location.hash = hash;
+        getOidDescriptionHandler();
     } catch (e) {
         tree.innerHTML = toHTML(e);
     }

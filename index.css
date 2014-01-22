@@ -3,6 +3,15 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: justify;
 }
+/* ссылка у которой есть title*/
+.titled {
+    font-weight: bold;
+    color: #F00018;
+    /*content: "x 0a0\00a0";*/
+}
+a .titled[title]{
+    color: #33FFCC;
+}
 .tt {
     font-family: monospace;
 }
